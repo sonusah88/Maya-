@@ -1,52 +1,61 @@
-import speech_recognition as sr
 import pyttsx3
+import speech_recognition as sr
+import random
+import webbrowser
 import pywhatkit
+from googlesearch import search
+import sys
 
-# Initialize speech engine and recognizer
-engine = pyttsx3.init()
-r = sr.Recognizer()
-
-# Speak function with slow female voice
-print("Listening...")
-def speak(text):
-    engine.setProperty('rate', 130)
-    voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[1].id)  # female voice
-    engine.say(text)
+r=sr.Recognizer()
+engine= pyttsx3.init()
+def speak(a):
+    engine.say(a)
     engine.runAndWait()
 
-#task that should be added
+def process(word):
+    if "play" in word.lower():
+        pywhatkit.playonyt(word)
+    elif "open google" in word.lower():
+        webbrowser.open("https://www.google.com")
+    elif "open facebook" in word.lower():
+        webbrowser.open("https://www.facebook.com")
+    elif "search" in word.lower():
+        query = word
+        for result in search(query, num_results=1):
+            print(result)
+            webbrowser.open(result)
+    elif "send message" in word.lower():
+        print("speak your message...")
+        with sr.Microphone() as source:
+            audio= r.listen(source,timeout=3,phrase_time_limit=5)
+            a= r.recognize_google(audio) 
+        pywhatkit.sendwhatmsg_instantly(
+        phone_no="+977 981-5860252",
+        message=a,
+        wait_time=10,  # Seconds to wait before sending
+        tab_close=True,
+        close_time=2  # Close browser tab after sending
+    )   
+        
 
-def task(text):
-    if "play" in text.lower():
-        song = text.lower().replace("play", "").strip()
-        pywhatkit.playonyt(song)
-    elif "stop" in text:
-        exit()
+        
 
-# Main loop
-if __name__ == "__main__":
+
+        
+
+if __name__=="__main__":
+    l=["exit","bye","stop","chup","i hate u","bhai"]
     while True:
         try:
             with sr.Microphone() as source:
-                print("Say something...")
-                audio = r.listen(source, timeout=3, phrase_time_limit=2)
-                word = r.recognize_google(audio)
-                print(f"You said :{word}")
-                if "stop" in word:
-                    break
-                if "baby" in word.lower() or "hello baby" in word.lower():
-                    speak("Yes baby ")
-                    print("🫶🏻🥹❤️‍🩹")
-                    with sr.Microphone() as source:
-                        print("Listening Darling...")
-                        audio = r.listen(source, timeout=3, phrase_time_limit=2)
-                        word1 = r.recognize_google(audio)
-                        print(f"You said: {word1}")
-                        task(word1)
-                else:
-                    print("🥺🥺🥺😡")
-
-        except Exception as e:
-            print("!!! Something went wrong !!!")
-            print(e)
+                audio= r.listen(source)
+                word= r.recognize_google(audio) 
+            speak(word)
+            print(word)
+            for i in l:
+                if i in word.lower():
+                    speak("good bye")
+            break
+            process(word)
+        except:
+            print("Something went wrong....")
