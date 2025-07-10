@@ -30,7 +30,7 @@ def process(word):
             audio= r.listen(source,timeout=3,phrase_time_limit=5)
             a= r.recognize_google(audio) 
         pywhatkit.sendwhatmsg_instantly(
-        phone_no="+977 981-5860252",
+        phone_no="any number",
         message=a,
         wait_time=10,  # Seconds to wait before sending
         tab_close=True,
