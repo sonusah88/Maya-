@@ -30,18 +30,12 @@ def process(word):
             audio= r.listen(source,timeout=3,phrase_time_limit=5)
             a= r.recognize_google(audio) 
         pywhatkit.sendwhatmsg_instantly(
-        phone_no="any number",
+        phone_no="+9779817712881",
         message=a,
         wait_time=10,  # Seconds to wait before sending
         tab_close=True,
         close_time=2  # Close browser tab after sending
     )   
-        
-
-        
-
-
-        
 
 if __name__=="__main__":
     l=["exit","bye","stop","chup","i hate u","bhai"]
@@ -52,10 +46,6 @@ if __name__=="__main__":
                 word= r.recognize_google(audio) 
             speak(word)
             print(word)
-            for i in l:
-                if i in word.lower():
-                    speak("good bye")
-            break
             process(word)
         except:
             print("Something went wrong....")
